@@ -5,7 +5,7 @@
     {
         List<Task> taskList = new();
 
-        Console.WriteLine("TodoList initiated. \nUse <h> or <help> to get a list of commands");
+        Console.WriteLine("TodoList initiated. \nUse <help> to get a list of commands");
 
         while (true)
         {
@@ -13,23 +13,27 @@
 
             // If the last element of the command is a digit
             // Split the array into two parts and place them into separated command
-            List<string> separatedCommand = new();
-            if (userCommand.Any())
+
+            string[] separatedCommand = new string[1];
+            if (userCommand.Any(Char.IsWhiteSpace))
+            {
+                separatedCommand = userCommand.Split(' ', 2);
+            }
+            else
+            {
+                separatedCommand[0] = userCommand.ToLower();
+            }
+
+    
+            if (separatedCommand[0] == TaskCommands.help)
+            {
+                TaskCommands.DisplayCommands();
+            }
+            else if (separatedCommand[0] == TaskCommands.toggleTask)
+            {
                 if (char.IsDigit(userCommand.Last()))
                 {
-
-                }
-
-            // If input is correct command or that commands first letter
-            if (userCommand == TaskCommands.help || userCommand == TaskCommands.help.First().ToString())
-                TaskCommands.DisplayCommands();
-
-            // TODO: Fix functionality to have more tasks than single digit numbers
-            else if ( == TaskCommands.toggleTask || userCommand == TaskCommands.toggleTask.First().ToString())
-            {
-                if ()
-                {
-                    int commandIndex = Convert.ToInt32(userCommand.Last());
+                    int commandIndex = Convert.ToInt32(separatedCommand[1]);
 
                     try
                     {
@@ -37,15 +41,52 @@
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        Console.WriteLine("Index was out of range. Use <t> or <tasks> to display current tasks.");
+                        Console.WriteLine("Index was out of range. Use <tasks> to display current tasks.");
                     }
                 }
             }
+            else if(separatedCommand[0] == TaskCommands.addTask)
+            {
+                Task task = new(separatedCommand[1], taskList.Count);
+
+                taskList.Add(task);
+            }
+            else if(separatedCommand[0] == TaskCommands.removeTask)
+            {
+                if(char.IsDigit(userCommand.Last()))
+                {
+                    int commandIndex = Convert.ToInt32(separatedCommand[1]);
+
+                    try
+                    {
+                        taskList[commandIndex] = null;
+                        taskList.Remove(taskList[commandIndex]);
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Console.WriteLine("Index was out of range. Use <tasks> to display current tasks.");
+                    }
+                }
+            }
+            else if(separatedCommand[0] == TaskCommands.displayTasks)
+            {
+                foreach (Task item in taskList)
+                {
+                    item.WriteTask();
+                }
+            }
+            else if(separatedCommand[0] == TaskCommands.clear)
+            {
+                Console.Clear();
+            }
+            else if(string.IsNullOrEmpty(separatedCommand[0]))
+            {
+                // Do Nothing
+            }
             else
+            {
                 Console.WriteLine("Command not recognized. Use <h> or <help> for a list of commands");
-
-
-
+            }
 
         }
     }

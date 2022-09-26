@@ -20,11 +20,16 @@ class Task
 
     public void ToggleIsDone()
     {
-        IsDone = IsDone;
+        IsDone = !IsDone;
 
         if (IsDone)
             CheckMark = 'x';
         else
             CheckMark = ' ';
+    }
+
+    public void DeleteInstance()
+    {
+
     }
 }
