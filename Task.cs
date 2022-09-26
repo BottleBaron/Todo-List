@@ -28,8 +28,5 @@ class Task
             CheckMark = ' ';
     }
 
-    public void DeleteInstance()
-    {
-
-    }
+   
 }

@@ -24,7 +24,7 @@
                 separatedCommand[0] = userCommand.ToLower();
             }
 
-    
+            // Checks for a valid command and executes their function
             if (separatedCommand[0] == TaskCommands.help)
             {
                 TaskCommands.DisplayCommands();
@@ -41,7 +41,14 @@
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        Console.WriteLine("Index was out of range. Use <tasks> to display current tasks.");
+                        Console.WriteLine("Index was out of range. Use <list> to display current tasks.");
+                    }
+                }
+                else if(separatedCommand[1] == "all")
+                {
+                    foreach (Task entry in taskList)
+                    {
+                        entry.ToggleIsDone();
                     }
                 }
             }
@@ -64,15 +71,20 @@
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        Console.WriteLine("Index was out of range. Use <tasks> to display current tasks.");
+                        Console.WriteLine("Index was out of range. Use <list> to display current tasks.");
                     }
                 }
             }
             else if(separatedCommand[0] == TaskCommands.displayTasks)
             {
-                foreach (Task item in taskList)
+                if(taskList.Count == 0)
+                    Console.WriteLine("List is Empty");
+                else
                 {
-                    item.WriteTask();
+                    foreach (Task entry in taskList)
+                    {
+                        entry.WriteTask();
+                    }
                 }
             }
             else if(separatedCommand[0] == TaskCommands.clear)
@@ -85,7 +97,7 @@
             }
             else
             {
-                Console.WriteLine("Command not recognized. Use <h> or <help> for a list of commands");
+                Console.WriteLine("Command not recognized. Use or <list> for a list of commands");
             }
 
         }
