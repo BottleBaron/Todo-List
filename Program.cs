@@ -11,9 +11,8 @@
         {
             string userCommand = Console.ReadLine();
 
-            // If the last element of the command is a digit
+            
             // Split the array into two parts and place them into separated command
-
             string[] separatedCommand = new string[1];
             if (userCommand.Any(Char.IsWhiteSpace))
             {
@@ -37,7 +36,7 @@
 
                     try
                     {
-                        taskList[commandIndex].ToggleIsDone();
+                        taskList[commandIndex - 1].ToggleIsDone();
                     }
                     catch (IndexOutOfRangeException)
                     {
@@ -54,7 +53,7 @@
             }
             else if(separatedCommand[0] == TaskCommands.addTask)
             {
-                Task task = new(separatedCommand[1], taskList.Count);
+                Task task = new(separatedCommand[1], taskList.Count + 1);
 
                 taskList.Add(task);
             }
@@ -66,14 +65,16 @@
 
                     try
                     {
-                        taskList[commandIndex] = null;
-                        taskList.Remove(taskList[commandIndex]);
+                        taskList[commandIndex - 1] = null;
+                        taskList.Remove(taskList[commandIndex - 1]);
                     }
                     catch (IndexOutOfRangeException)
                     {
                         Console.WriteLine("Index was out of range. Use <list> to display current tasks.");
                     }
                 }
+                else
+                    Console.WriteLine("The last member of this command must be a number. Use <list> to display current tasks.");
             }
             else if(separatedCommand[0] == TaskCommands.displayTasks)
             {
@@ -90,6 +91,10 @@
             else if(separatedCommand[0] == TaskCommands.clear)
             {
                 Console.Clear();
+            }
+            else if(separatedCommand[0] == TaskCommands.clearList)
+            {
+                taskList.Clear();
             }
             else if(string.IsNullOrEmpty(separatedCommand[0]))
             {
