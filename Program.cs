@@ -11,7 +11,7 @@
         {
             string userCommand = Console.ReadLine();
 
-            
+
             // Split the array into two parts and place them into separated command
             string[] separatedCommand = new string[1];
             if (userCommand.Any(Char.IsWhiteSpace))
@@ -32,18 +32,25 @@
             {
                 if (char.IsDigit(userCommand.Last()))
                 {
-                    int commandIndex = Convert.ToInt32(separatedCommand[1]);
-
                     try
                     {
+                        int commandIndex = Convert.ToInt32(separatedCommand[1]);
                         taskList[commandIndex - 1].ToggleIsDone();
                     }
-                    catch (IndexOutOfRangeException)
+                    catch (ArgumentOutOfRangeException)
                     {
                         Console.WriteLine("Index was out of range. Use <list> to display current tasks.");
                     }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Format Exception. Please enter only numbers in the second half of this command");
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.WriteLine("Overflow Exception");
+                    }
                 }
-                else if(separatedCommand[1] == "all")
+                else if (separatedCommand[1] == "all")
                 {
                     foreach (Task entry in taskList)
                     {
@@ -51,34 +58,47 @@
                     }
                 }
             }
-            else if(separatedCommand[0] == TaskCommands.addTask)
+            else if (separatedCommand[0] == TaskCommands.addTask)
             {
-                Task task = new(separatedCommand[1], taskList.Count + 1);
-
-                taskList.Add(task);
-            }
-            else if(separatedCommand[0] == TaskCommands.removeTask)
-            {
-                if(char.IsDigit(userCommand.Last()))
+                try
                 {
-                    int commandIndex = Convert.ToInt32(separatedCommand[1]);
-
+                    Task task = new(separatedCommand[1], taskList.Count + 1);
+                    taskList.Add(task);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("Entry must contain a name. - Format: add <name>");
+                }
+            }
+            else if (separatedCommand[0] == TaskCommands.removeTask)
+            {
+                if (char.IsDigit(userCommand.Last()))
+                {
                     try
                     {
+                        int commandIndex = Convert.ToInt32(separatedCommand[1]);
                         taskList[commandIndex - 1] = null;
                         taskList.Remove(taskList[commandIndex - 1]);
                     }
-                    catch (IndexOutOfRangeException)
+                    catch (ArgumentOutOfRangeException)
                     {
                         Console.WriteLine("Index was out of range. Use <list> to display current tasks.");
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Format Exception. Please enter only numbers in the second half of this command");
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.WriteLine("Overflow Exception");
                     }
                 }
                 else
                     Console.WriteLine("The last member of this command must be a number. Use <list> to display current tasks.");
             }
-            else if(separatedCommand[0] == TaskCommands.displayTasks)
+            else if (separatedCommand[0] == TaskCommands.displayTasks)
             {
-                if(taskList.Count == 0)
+                if (taskList.Count == 0)
                     Console.WriteLine("List is Empty");
                 else
                 {
@@ -88,15 +108,15 @@
                     }
                 }
             }
-            else if(separatedCommand[0] == TaskCommands.clear)
+            else if (separatedCommand[0] == TaskCommands.clear)
             {
                 Console.Clear();
             }
-            else if(separatedCommand[0] == TaskCommands.clearList)
+            else if (separatedCommand[0] == TaskCommands.clearList)
             {
                 taskList.Clear();
             }
-            else if(string.IsNullOrEmpty(separatedCommand[0]))
+            else if (string.IsNullOrEmpty(separatedCommand[0]))
             {
                 // Do Nothing
             }

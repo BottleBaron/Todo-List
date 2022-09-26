@@ -13,7 +13,7 @@ static class TaskCommands
         help + " - Displays all valid commands",
         toggleTask + " - Format: check <index> or <all> - Toggles the checkbox of the task with the corresponding index",
         removeTask + " - Format: remove <index> - Removes the task with the corresponding index",
-        addTask + " Format: add <name> - Adds a task to your list",
+        addTask + " - Format: add <name> - Adds a task to your list",
         displayTasks + " - Shows all current tasks",
         clear + " - Clears the console",
         clearList + " - Clears your Todo List"
